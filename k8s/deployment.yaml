@@ -1,0 +1,77 @@
+# Deployment do Postgre
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgre
+spec:
+  selector:
+    matchLabels:
+      app: postgre
+  template:
+    metadata:
+      labels:
+        app: postgre
+    spec:
+      containers:
+        - name: postgre
+          image: postgres:14.3
+          ports:
+            - containerPort: 5432
+          env:
+          - name: POSTGRES_PASSWORD
+            value: "Kube#123"
+          - name: POSTGRES_USER
+            value: "kubenews"
+          - name: POSTGRES_DB
+            value: "kubenews"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgre
+spec:
+  selector:
+    app: postgre
+  ports:
+  - port: 5432 # porta que vai ser utilizada pelo service | request na porta
+    targetPort: 5432 # porta que vai ser direcionada pelo pod | direcionar para essa porta
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubenews
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: kubenews
+  template:
+    metadata:
+      labels:
+        app: kubenews
+    spec:
+      containers:
+        - name: kubenews
+          image: ivanjuniordocker/kube-news:v1
+          env: # presentes no post.js
+          - name: DB_DATABASE
+            value: "kubenews"
+          - name: DB_USERNAME
+            value: "kubenews"
+          - name: DB_PASSWORD
+            value: "Kube#123"
+          - name: DB_HOST
+            value: "postgre" # vai ser o nome do service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubenews
+spec:
+  selector:
+    app: kubenews
+  ports:
+  - port: 80 # vai ter o request na porta 80 (pq é a porta padrão http)
+    targetPort: 8080 # 8080 pq é a porta que a aplicação é exposta
+    nodePort: 30000 # como está usando o k3d para dar bind na porta 30000
+  type: LoadBalancer
