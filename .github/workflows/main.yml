@@ -27,13 +27,13 @@ jobs:
        # docker build
        # docker push
         
-      - name: Docker Login
+      - name: Autenticando usuário no repositorio de imagens do Docker
         uses: docker/login-action@v2.0.0
         with:
           username: ${{secrets.DOCKERHUB_USER}}
           password: ${{secrets.DOCKERHUB_PWD}}
       
-      - name: Build and push Docker images
+      - name: Construindo a nova imagem da aplicação e enviando ao Docker Hub
         uses: docker/build-push-action@v3.0.0
         with:
           file: ./src/Dockerfile
@@ -50,14 +50,14 @@ jobs:
       - uses: actions/checkout@v3
       
       # definindo contexto do Kubernetes
-      - name: Kubernetes Set Context
+      - name: (Action Kubernetes Set Context) - Defininco o kubeconfig
         uses: Azure/k8s-set-context@v3.0
         with:
           method: kubeconfig # especificação do kubeconfig
           kubeconfig: ${{secrets.K8S_CONFIG}} # especifica o arquivo kube_config
          
       # para aplicar o deploy
-      - name: Deploy to Kubernetes cluster
+      - name: (Action Deploy to Kubernetes cluster) - Efetuando o deploy no Kubernetes
         uses: Azure/k8s-deploy@v4.3
         with:
           images: ivanjuniordocker/kube-news:${{github.run_number}} # vao ser as imagens que vai alterar no manifesto
