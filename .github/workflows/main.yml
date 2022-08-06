@@ -27,13 +27,13 @@ jobs:
        # docker build
        # docker push
         
-      - name: Autenticando usuário no repositorio de imagens do Docker
+      - name: (Action Docker Login) Autenticando usuário no repositorio de imagens do Docker
         uses: docker/login-action@v2.0.0
         with:
           username: ${{secrets.DOCKERHUB_USER}}
           password: ${{secrets.DOCKERHUB_PWD}}
       
-      - name: Construindo a nova imagem da aplicação e enviando ao Docker Hub
+      - name: (Action Build and push Docker images) Construindo a nova imagem da aplicação e enviando ao Docker Hub
         uses: docker/build-push-action@v3.0.0
         with:
           file: ./src/Dockerfile
