@@ -50,14 +50,14 @@ jobs:
       
       # definindo contexto do Kubernetes
       - name: Kubernetes Set Context
-      uses: Azure/k8s-set-context@v3.0
-      with:
-        method: kubeconfig # especificação do kubeconfig
-        kubeconfig: ${{secrets.K8S_CONFIG}} # especifica o arquivo kube_config
+        uses: Azure/k8s-set-context@v3.0
+        with:
+          method: kubeconfig # especificação do kubeconfig
+          kubeconfig: ${{secrets.K8S_CONFIG}} # especifica o arquivo kube_config
          
       # para aplicar o deploy
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v4.3
-      with:
-        images: ivanjuniordocker/kube-news:${{github.run_number}} # vao ser as imagens que vai alterar no manifesto
-        manifests: k8s/deployment.yaml
+        with:
+          images: ivanjuniordocker/kube-news:${{github.run_number}} # vao ser as imagens que vai alterar no manifesto
+          manifests: k8s/deployment.yaml
