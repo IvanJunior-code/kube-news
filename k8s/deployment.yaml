@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         - name: kubenews
-          image: ivanjuniordocker/kube-news:v1
+          image: ivanjuniordocker/kube-news:v25
           env: # presentes no post.js
           - name: DB_DATABASE
             value: "kubenews"
