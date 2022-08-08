@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v3
       
       # definindo contexto do Kubernetes
-      - name: (Action Kubernetes Set Context) - Defininco o kubeconfig
+      - name: (Action Kubernetes Set Context) - Definindo o kubeconfig
         uses: Azure/k8s-set-context@v3.0
         with:
           method: kubeconfig # especificação do kubeconfig
